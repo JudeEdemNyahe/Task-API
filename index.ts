@@ -5,9 +5,8 @@ import express, {
 } from 'express';
 import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
-import cors from 'cors';
 import bodyParser from 'body-parser';
-import { Task } from './src/tasks/task.entitty';
+import { Task } from './src/tasks/task.entity';
 
 //Instantiate express
 const app: Express = express();
@@ -17,7 +16,7 @@ dotenv.config();
 app.use(bodyParser.json());
 
 //Enable CORS
-app.use(cors());
+//app.use(cors());
 
 //TypeORM connection to database
 export const AppDataSource = new DataSource({

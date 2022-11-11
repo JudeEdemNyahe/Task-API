@@ -4,7 +4,7 @@
     "description": "building node api with typescript",
     "main": "index.js",
     "scripts": {
-        "dev": "ts-node index.ts",
+        "dev": "nodemon index.ts",
         "build": "npx tsc",
         "start": "node dist/index.js"
     },
@@ -17,7 +17,6 @@
     "license": "ISC",
     "dependencies": {
         "@types/body-parser": "^1.19.2",
-        "@types/cors": "^2.8.12",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
         "mysql2": "^2.3.3",
