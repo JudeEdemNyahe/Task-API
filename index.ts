@@ -1,13 +1,9 @@
-import express, {
-  Express,
-  Request,
-  Response,
-} from 'express';
+import express, { Express } from 'express';
 import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
 import { Task } from './src/tasks/task.entity';
-
+import { taskRouter } from './src/tasks/tasks.router';
 //Instantiate express
 const app: Express = express();
 dotenv.config();
@@ -33,10 +29,7 @@ export const AppDataSource = new DataSource({
 //Define server port
 const PORT = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World');
-});
-
+app.use('/', taskRouter);
 AppDataSource.initialize()
   .then(() => {
     app.listen(PORT);
