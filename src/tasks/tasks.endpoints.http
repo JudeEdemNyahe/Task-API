@@ -2,3 +2,16 @@
 
 GET http://localhost:3200/tasks
 Content-Type: application/json
+
+### Create a new task
+
+POST http://localhost:3200/tasks
+content-type: application/json
+
+{
+    "title": "Task 1",
+    "date": "2020-01-01",
+    "description": "Task 1 description",
+    "priority": "normal",
+    "status": "todo"
+}

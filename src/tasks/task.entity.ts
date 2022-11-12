@@ -25,11 +25,11 @@ export class Task {
     enum: Priority,
     default: Priority.NORMAL,
   })
-  Priority: Priority;
+  priority: Priority;
   @Column({
     type: 'enum',
     enum: Status,
     default: Status.TODO,
   })
-  Status: Status;
+  status: Status;
 }
