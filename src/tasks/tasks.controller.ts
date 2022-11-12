@@ -1,8 +1,12 @@
 import { AppDataSource } from '../../index';
 import { Task } from './task.entity';
-import { instanceToPlain } from 'class-transformer';
+import {
+  instanceToPlain,
+  plainToInstance,
+} from 'class-transformer';
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
+import { UpdateResult } from 'typeorm';
 
 class TasksController {
   public async getAll(
@@ -86,12 +90,14 @@ class TasksController {
     }
 
     //Fetch the task from the database
-    let task: Task;
+    let task: Task | null;
 
     try {
       task = await AppDataSource.getRepository(
         Task,
-      ).findOne(req.body.id);
+      ).findOne({
+        where: { id: req.body.id },
+      });
 
       if (!task) {
         return res
@@ -99,19 +105,33 @@ class TasksController {
           .json({ error: 'Task not found' });
       }
 
-      //Update the task
-      task.status = req.body.status;
+      let updatedTask: UpdateResult;
 
-      //Save the task to the database
-      await AppDataSource.getRepository(Task).save(task);
+      try {
+        updatedTask = await AppDataSource.getRepository(
+          Task,
+        ).update(
+          req.body.id,
+          plainToInstance(Task, {
+            status: req.body.status,
+          }),
+        );
 
-      //Convert the task to an object
-      task = instanceToPlain(task) as Task;
+        updatedTask = instanceToPlain(
+          updatedTask,
+        ) as UpdateResult;
 
-      return res.status(200).json(task);
-    } catch (err) {
+        return res.status(200).json(updatedTask);
+      } catch (error) {
+        console.log(error);
+        return res
+          .json({ error: 'Internal Server Error ' })
+          .status(500);
+      }
+    } catch (error) {
+      console.log(error);
       return res
-        .json({ error: 'Internal Server Error' })
+        .json({ error: 'Internal Server Error ' })
         .status(500);
     }
   }
